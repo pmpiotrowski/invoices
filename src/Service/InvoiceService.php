@@ -15,10 +15,11 @@ class InvoiceService
         $this->ir = $ir;
     }
 
-    public function generateNumber(){
+    public function generateNumber()
+    {
         $lastRecord = $this->ir->findByLastRecord();
         $id = 1;
-        if (null !== $lastRecord){
+        if (null !== $lastRecord) {
             $id = $lastRecord->getId() + 1;
         }
         return $id . '/' . date('m/Y');

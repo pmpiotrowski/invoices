@@ -27,7 +27,7 @@ class InvoiceItemType extends AbstractType
             ])
             ->add('unit', ChoiceType::class, [
                 'label' => false,
-                'choices'  => [
+                'choices' => [
                     'szt' => 'szt',
                     'godz' => 'godz',
                     'dni' => 'dni',
@@ -39,7 +39,7 @@ class InvoiceItemType extends AbstractType
             ])
             ->add('vat', ChoiceType::class, [
                 'label' => false,
-                'choices'  => [
+                'choices' => [
                     '23' => '23',
                     '8' => '8',
                     '5' => '5',
@@ -58,7 +58,7 @@ class InvoiceItemType extends AbstractType
                     'class' => 'price_netto',
                     'step' => '0.01'
                 ]
-                ])
+            ])
             ->add('price_brutto', NumberType::class, [
                 'label' => false,
                 'html5' => true,
@@ -67,8 +67,7 @@ class InvoiceItemType extends AbstractType
                     'class' => 'price_brutto',
                     'step' => '0.01'
                 ]
-            ])
-        ;
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

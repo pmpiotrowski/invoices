@@ -107,7 +107,7 @@
             <td width='15%'>{{ form_row(form.items.vars.prototype.price_brutto)|e }}</td>
             <td width='10%'><button class='btn btn-danger delete'>Usuń</button></td>
         </tr>"
-        >
+>
     <tr>
         <th width='30%'>Nazwa</th>
         <th width='10%'>Ilość</th>
@@ -125,7 +125,9 @@
             <td width='10%'>{{ form_row(item.vat) }}</td>
             <td width='15%'>{{ form_row(item.price_netto) }}</td>
             <td width='15%'>{{ form_row(item.price_brutto) }}</td>
-            <td width='10%'><button class='btn btn-danger delete'>Usuń</button></td>
+            <td width='10%'>
+                <button class='btn btn-danger delete'>Usuń</button>
+            </td>
         </tr>
     {% endfor %}
 </table>
@@ -182,17 +184,17 @@
         $('table.items tbody').append(newForm);
     }
 
-    function recalculationSums(){
+    function recalculationSums() {
 
         var netto_sum = 0;
-        $('.price_netto').each(function(){
+        $('.price_netto').each(function () {
             var amount = parseInt($(this).closest('tr').find('.amount').val());
             netto_sum += parseFloat($(this).val()) * amount;  // Or this.innerHTML, this.innerText
         });
         $('.netto_sum').val(netto_sum.toFixed(2));
 
         var brutto_sum = 0;
-        $('.price_brutto').each(function(){
+        $('.price_brutto').each(function () {
             var amount = parseInt($(this).closest('tr').find('.amount').val());
             brutto_sum += parseFloat($(this).val()) * amount;  // Or this.innerHTML, this.innerText
         });
@@ -202,38 +204,39 @@
         $('.vat_sum').val(vat_sum.toFixed(2));
 
     }
+
     // setup an "add a tag" link
     var $addTagButton = $('<button type="button" class="btn btn-success add_button">Dodaj</button>');
     var $newLinkLi = $('<tr></tr>');
 
-    jQuery(document).ready(function() {
+    jQuery(document).ready(function () {
 
-        $(document).on('change', '.amount', function(){
+        $(document).on('change', '.amount', function () {
             recalculationSums();
         });
-        $(document).on('change', '.price_netto', function(){
+        $(document).on('change', '.price_netto', function () {
             var priceNetto = parseFloat($(this).val());
             var vat = parseInt($(this).closest('tr').find('.vat').val());
             var priceBrutto = priceNetto * (1 + (vat / 100));
             if (vat) {
                 $(this).parent().closest('tr').find('.price_brutto').val(priceBrutto.toFixed(2));
-            }else{
+            } else {
                 $(this).parent().closest('tr').find('.price_brutto').val(priceNetto.toFixed(2));
             }
             recalculationSums();
         });
-        $(document).on('change', '.price_brutto', function(){
+        $(document).on('change', '.price_brutto', function () {
             var priceBrutto = parseFloat($(this).val());
             var vat = parseInt($(this).closest('tr').find('.vat').val());
             var priceNetto = priceBrutto / (1 + (vat / 100));
             if (vat) {
                 $(this).parent().closest('tr').find('.price_netto').val(priceNetto.toFixed(2));
-            }else{
+            } else {
                 $(this).parent().closest('tr').find('.price_netto').val(priceBrutto.toFixed(2));
             }
             recalculationSums();
         });
-        $(document).on('change', '.vat', function(){
+        $(document).on('change', '.vat', function () {
             var vat = parseInt($(this).closest('tr').find('.vat').val());
             $(this).parent().closest('tr').find('.price_netto').change();
             recalculationSums();
@@ -243,11 +246,11 @@
         $('.add_option').append($addTagButton);
         $collectionHolder.data('index', $collectionHolder.find('input').length);
 
-        $addTagButton.on('click', function(e) {
+        $addTagButton.on('click', function (e) {
             // add a new tag form (see next code block)
             addItemForm($collectionHolder, $newLinkLi);
         });
-        $collectionHolder.on("click", ".delete", function() {
+        $collectionHolder.on("click", ".delete", function () {
             $(this).closest("tr").remove();
         });
     });

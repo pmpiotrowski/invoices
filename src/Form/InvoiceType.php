@@ -119,8 +119,7 @@ class InvoiceType extends AbstractType
                 'attr' => [
                     'readonly' => true,
                     'class' => 'brutto_sum'
-                ]])
-        ;
+                ]]);
     }
 
     public function configureOptions(OptionsResolver $resolver)
