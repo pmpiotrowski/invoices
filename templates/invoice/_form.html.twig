@@ -1,0 +1,254 @@
+{{ form_start(form) }}
+<div class="my-custom-class-for-errors">
+    {{ form_errors(form) }}
+</div>
+
+<div class="row mt-4">
+    <div class="col">
+        {{ form_row(form.type) }}
+    </div>
+    <div class="col">
+        {{ form_row(form.number) }}
+    </div>
+    <div class="col" id="some-custom-id">
+        {{ form_row(form.invoicing_date) }}
+    </div>
+    <div class="col" id="some-custom-id">
+        {{ form_row(form.invoicing_place) }}
+    </div>
+    <div class="col" id="some-custom-id">
+        {{ form_row(form.sale_date) }}
+    </div>
+</div>
+<hr/>
+<div class="row">
+    <div class="col">
+        <h3>Sprzedawca</h3>
+        <div class="row">
+            <div class="col">
+                {{ form_row(form.seller_name) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                {{ form_row(form.seller_nip) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                {{ form_row(form.seller_street) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                {{ form_row(form.seller_postal_code) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                {{ form_row(form.seller_city) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                {{ form_row(form.seller_account_bank_number) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                {{ form_row(form.seller_bank) }}
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <h3>Nabywca</h3>
+        <div class="row">
+            <div class="col">
+                {{ form_row(form.buyer_type) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                {{ form_row(form.buyer_name) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                {{ form_row(form.buyer_nip) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                {{ form_row(form.buyer_street) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                {{ form_row(form.buyer_postal_code) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                {{ form_row(form.buyer_city) }}
+            </div>
+        </div>
+    </div>
+</div>
+<hr/>
+<h3>Pozycje</h3>
+<table class="table table-hover items"
+       data-prototype="
+        <tr>
+            <td width='30%'>{{ form_row(form.items.vars.prototype.name)|e }}</td>
+            <td width='10%'>{{ form_row(form.items.vars.prototype.amount)|e }}</td>
+            <td width='10%'>{{ form_row(form.items.vars.prototype.unit)|e }}</td>
+            <td width='10%'>{{ form_row(form.items.vars.prototype.vat)|e }}</td>
+            <td width='15%'>{{ form_row(form.items.vars.prototype.price_netto)|e }}</td>
+            <td width='15%'>{{ form_row(form.items.vars.prototype.price_brutto)|e }}</td>
+            <td width='10%'><button class='btn btn-danger delete'>Usuń</button></td>
+        </tr>"
+        >
+    <tr>
+        <th width='30%'>Nazwa</th>
+        <th width='10%'>Ilość</th>
+        <th width='10%'>Jedn.</th>
+        <th width='10%'>VAT</th>
+        <th width='15%'>Netto</th>
+        <th width='15%'>Brutto</th>
+        <th width='10%' class="add_option"></th>
+    </tr>
+    {% for item in form.items %}
+        <tr>
+            <td width='30%'>{{ form_row(item.name) }}</td>
+            <td width='10%'>{{ form_row(item.amount) }}</td>
+            <td width='10%'>{{ form_row(item.unit) }}</td>
+            <td width='10%'>{{ form_row(item.vat) }}</td>
+            <td width='15%'>{{ form_row(item.price_netto) }}</td>
+            <td width='15%'>{{ form_row(item.price_brutto) }}</td>
+            <td width='10%'><button class='btn btn-danger delete'>Usuń</button></td>
+        </tr>
+    {% endfor %}
+</table>
+<div class="row ">
+    <div class="col-3 offset-9">
+        {{ form_row(form.netto_sum) }}
+    </div>
+</div>
+<div class="row">
+    <div class="col-3 offset-9">
+        {{ form_row(form.vat_sum) }}
+    </div>
+</div>
+<div class="row">
+    <div class="col-3 offset-9">
+        {{ form_row(form.brutto_sum) }}
+    </div>
+</div>
+
+<hr/>
+<div class="row">
+    <div class="col">
+        {{ form_row(form.status) }}
+    </div>
+    <div class="col">
+        {{ form_row(form.amount_paid) }}
+    </div>
+</div>
+<hr/>
+<div class="row">
+    <div class="col">
+        {{ form_row(form.invoice_issuer) }}
+    </div>
+    <div class="col">
+        {{ form_row(form.invoice_recipient) }}
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        {{ form_row(form.currency) }}
+    </div>
+</div>
+<button class="btn btn-success">{{ button_label|default('Zapisz') }}</button>
+{{ form_end(form) }}
+<script>
+    function addItemForm($collectionHolder, $newLinkLi) {
+        var prototype = $collectionHolder.data('prototype');
+        var index = $collectionHolder.data('index');
+
+        var newForm = prototype;
+        newForm = newForm.replace(/__name__/g, index);
+        $collectionHolder.data('index', index + 1);
+
+        $('table.items tbody').append(newForm);
+    }
+
+    function recalculationSums(){
+
+        var netto_sum = 0;
+        $('.price_netto').each(function(){
+            var amount = parseInt($(this).closest('tr').find('.amount').val());
+            netto_sum += parseFloat($(this).val()) * amount;  // Or this.innerHTML, this.innerText
+        });
+        $('.netto_sum').val(netto_sum.toFixed(2));
+
+        var brutto_sum = 0;
+        $('.price_brutto').each(function(){
+            var amount = parseInt($(this).closest('tr').find('.amount').val());
+            brutto_sum += parseFloat($(this).val()) * amount;  // Or this.innerHTML, this.innerText
+        });
+        $('.brutto_sum').val(brutto_sum.toFixed(2));
+
+        var vat_sum = brutto_sum - netto_sum;
+        $('.vat_sum').val(vat_sum.toFixed(2));
+
+    }
+    // setup an "add a tag" link
+    var $addTagButton = $('<button type="button" class="btn btn-success add_button">Dodaj</button>');
+    var $newLinkLi = $('<tr></tr>');
+
+    jQuery(document).ready(function() {
+
+        $(document).on('change', '.amount', function(){
+            recalculationSums();
+        });
+        $(document).on('change', '.price_netto', function(){
+            var priceNetto = parseFloat($(this).val());
+            var vat = parseInt($(this).closest('tr').find('.vat').val());
+            var priceBrutto = priceNetto * (1 + (vat / 100));
+            if (vat) {
+                $(this).parent().closest('tr').find('.price_brutto').val(priceBrutto.toFixed(2));
+            }else{
+                $(this).parent().closest('tr').find('.price_brutto').val(priceNetto.toFixed(2));
+            }
+            recalculationSums();
+        });
+        $(document).on('change', '.price_brutto', function(){
+            var priceBrutto = parseFloat($(this).val());
+            var vat = parseInt($(this).closest('tr').find('.vat').val());
+            var priceNetto = priceBrutto / (1 + (vat / 100));
+            if (vat) {
+                $(this).parent().closest('tr').find('.price_netto').val(priceNetto.toFixed(2));
+            }else{
+                $(this).parent().closest('tr').find('.price_netto').val(priceBrutto.toFixed(2));
+            }
+            recalculationSums();
+        });
+        $(document).on('change', '.vat', function(){
+            var vat = parseInt($(this).closest('tr').find('.vat').val());
+            $(this).parent().closest('tr').find('.price_netto').change();
+            recalculationSums();
+        });
+
+        $collectionHolder = $('table.items');
+        $('.add_option').append($addTagButton);
+        $collectionHolder.data('index', $collectionHolder.find('input').length);
+
+        $addTagButton.on('click', function(e) {
+            // add a new tag form (see next code block)
+            addItemForm($collectionHolder, $newLinkLi);
+        });
+        $collectionHolder.on("click", ".delete", function() {
+            $(this).closest("tr").remove();
+        });
+    });
+</script>

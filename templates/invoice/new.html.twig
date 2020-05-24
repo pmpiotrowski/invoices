@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Utworzenie faktury{% endblock %}
+
+{% block body %}
+    <h1 class="mt-4">Utworzenie faktury</h1><br/>
+
+    <a class="btn btn-primary" href="{{ path('invoice_index') }}">Powrót</a>
+
+    {{ include('invoice/_form.html.twig') }}
+
+{% endblock %}

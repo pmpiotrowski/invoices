@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Lista faktur{% endblock %}
+
+{% block body %}
+    <h1 class="mt-4">Lista faktur</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Numer</th>
+                <th>Typ</th>
+                <th>Data wystawienia</th>
+                <th>Data sprzedaży</th>
+                <th>Klient</th>
+                <th>Netto</th>
+                <th>Brutto</th>
+                <th>Status</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for invoice in invoices %}
+            <tr>
+                <td>{{ invoice.number }}</td>
+                <td>{{ invoice.type }}</td>
+                <td>{{ invoice.invoicingDate ? invoice.invoicingDate|date('Y-m-d') : '' }}</td>
+                <td>{{ invoice.saleDate ? invoice.invoicingDate|date('Y-m-d') : '' }}</td>
+                <td>{{ invoice.buyerName }}</td>
+                <td>{{ invoice.nettoSum }}</td>
+                <td>{{ invoice.bruttoSum }}</td>
+                <td>{{ invoice.status }}</td>
+                <td>
+                    <a class="btn btn-success" href="{{ path('invoice_edit', {'id': invoice.id}) }}">Edycja</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="27">Nie odnaleziono rekordów</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a class="btn btn-success" href="{{ path('invoice_new') }}">Utwórz</a>
+{% endblock %}
